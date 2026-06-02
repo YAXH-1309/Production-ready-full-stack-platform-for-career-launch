@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: enterprise-platform-backend:local
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=development
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: enterprise-platform-frontend:local
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend

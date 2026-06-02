@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enterprise-platform
+  labels:
+    app: enterprise-platform
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: enterprise-platform
+  template:
+    metadata:
+      labels:
+        app: enterprise-platform
+    spec:
+      containers:
+        - name: backend
+          image: ghcr.io/example/enterprise-platform-backend:1.0.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: production
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
